@@ -97,15 +97,8 @@ plt.show()
 #print("Execution Time: {:.2f} seconds".format(execution_time))
 
 
-# In[ ]:
 
-
-
-
-
-# In[219]:
-
-
+#separately plot of realized and unrealized pnl
 fig, ax1 = plt.subplots(figsize=(25, 12))
 ax2 = ax1.twinx()
 
@@ -121,30 +114,16 @@ ax2.tick_params(axis="y")
 
 fig.suptitle("Moving Average Crossover Strategy", fontsize=30)
 fig.autofmt_xdate()
-
 plt.grid()
 
 
-# In[ ]:
 
 
-
-
-
-# In[220]:
-
-
+#numerical realized and unrealized pnl
 final_unrlzd = unrlzd[-1]
 print(final_unrlzd, sum(profit_per_trade))
 
 
-# In[ ]:
-
-
-
-
-
-# In[221]:
 
 
 #Realized Percentage PnL
@@ -157,24 +136,6 @@ rlzd_cum.plot()
 plt.title('Realized Percentage PnL')
 plt.grid()
 plt.show()
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
 
 
 # In[ ]:

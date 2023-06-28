@@ -98,7 +98,7 @@ plt.show()
 
 
 
-#separately plot of realized and unrealized pnl
+#separate plot of realized and unrealized pnl
 fig, ax1 = plt.subplots(figsize=(25, 12))
 ax2 = ax1.twinx()
 

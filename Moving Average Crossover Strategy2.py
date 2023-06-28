@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
+# In[218]:
 
 
 import numpy as np
@@ -11,7 +11,9 @@ from datetime import datetime, timedelta
 import yfinance as yf
 import seaborn as sns 
 from datetime import datetime, timedelta
+import time
 
+#start_time = time.time()
 
 stock = yf.download(tickers='AAPL', period='20y')
 
@@ -34,8 +36,11 @@ pnl = []
 numberoftrades = []
 time_in_trade = []
 exit_date = []
+unrealizedpnl = []
+prices = []
 
 for date in stock.index:
+    
     
     if stock['SMA50'][date] < stock['SMA200'][date] and not inpos:
         'Enter Short Position'
@@ -67,15 +72,109 @@ for date in stock.index:
         exit_date.append(date)
         print('Exit Long:',sum(pnl))
     numberoftrades.append(inpos)
+    prices.append(stock['SMA50'][date])
 
 
 profit_per_trade = pd.Series(pnl)
 profit_per_trade.index = exit_date
 
+#unrealised pnl
+unrlzd = np.cumsum(np.multiply(np.diff(prices), numberoftrades[1:]))
+unrlzdpnl = pd.DataFrame(unrlzd)     #converted to dataframe for plotting 
+unrlzdpnl = unrlzdS.set_index(stock.index[:-1])
+
+
+#plotting
 plt.plot(np.cumsum(profit_per_trade),'-o')
+plt.plot(unrlzdpnl, '--', label='Unrealized PnL')
+plt.legend()
 plt.xlabel('date')
 plt.ylabel('Realized PnL')
 plt.show()
+
+#end_time = time.time()
+#execution_time = end_time - start_time
+#print("Execution Time: {:.2f} seconds".format(execution_time))
+
+
+# In[ ]:
+
+
+
+
+
+# In[219]:
+
+
+fig, ax1 = plt.subplots(figsize=(25, 12))
+ax2 = ax1.twinx()
+
+ax1.plot(np.cumsum(profit_per_trade),'-o', color='blue', lw=4)
+ax2.plot(stock.index[:-1], unrlzd, color='green', lw=4)
+
+ax1.set_xlabel("Date")
+ax1.set_ylabel("Realized PnL", color='blue', fontsize=14)
+ax1.tick_params(axis="y")
+
+ax2.set_ylabel("Unrealized PnL", color='green', fontsize=14)
+ax2.tick_params(axis="y")
+
+fig.suptitle("Moving Average Crossover Strategy", fontsize=30)
+fig.autofmt_xdate()
+
+plt.grid()
+
+
+# In[ ]:
+
+
+
+
+
+# In[220]:
+
+
+final_unrlzd = unrlzd[-1]
+print(final_unrlzd, sum(profit_per_trade))
+
+
+# In[ ]:
+
+
+
+
+
+# In[221]:
+
+
+#Realized Percentage PnL
+rlzd = profit_per_trade.pct_change()
+rlzd_cum = (rlzd + 1).cumprod()
+plt.grid()
+plt.xlabel('Date')
+plt.ylabel('Percentage PnL')
+rlzd_cum.plot()
+plt.title('Realized Percentage PnL')
+plt.grid()
+plt.show()
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
 
 
 # In[ ]:
